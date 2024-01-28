@@ -24,7 +24,7 @@
             if(content != ''){
                 var img = `${url}&chs=${dim}x${dim}&chl=${content}`;
                 document.getElementById('generatedQR').src = img;
-                document.getElementById('resultContent').className = "col-md-5 col-sm-10 mx-auto border border-3 border-warning rounded p-3 m-1 fw-bold text-center";
+                document.getElementById('resultContent').className = "col-md-5 col-sm-10 mx-auto border border-3 border-warning rounded p-3 m-1 fw-bold text-center container-fluid";
                 document.getElementById('resultContent').style.display = "block";
             }
             else{
@@ -33,45 +33,31 @@
             }
         }
 
-        function downloadQR(){
-            var imageUrl = document.getElementById("generatedQR").src;
-
-            // Create a link element
-            var downloadLink = document.createElement("a");
-
-            // Set the href attribute to the image URL
-            downloadLink.href = imageUrl;
-
-            // Set the download attribute with the desired filename
-            downloadLink.download = "downloaded_image.jpg";
-
-            // Append the link to the document
-            document.body.appendChild(downloadLink);
-
-            // Trigger a click event on the link to start the download
-            downloadLink.click();
-
-            // Remove the link from the document
-            document.body.removeChild(downloadLink);
-        }
-
         function download() {
-            var img = document.getElementById('generatedQR');
-            var canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var context = canvas.getContext('2d');
-            context.drawImage(img, 0, 0);
-
-            // Create a temporary link element
+            var imgSrc = document.getElementById('generatedQR').src;
             var link = document.createElement('a');
-            link.href = canvas.toDataURL('image/png');
+            link.href = imgSrc;
             link.download = 'generatedQR.png';
 
-            // Append the link to the document, trigger a click, and remove the link
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Create a temporary canvas
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width = 300; // Set the width of the canvas (adjust as needed)
+            canvas.height = 300; // Set the height of the canvas (adjust as needed)
+
+            // Create an image element with crossOrigin attribute
+            var img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = imgSrc;
+
+            // Draw the image on the canvas
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                link.href = canvas.toDataURL(); // Set the data URL as the link's href
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
         }
     </script>
 
