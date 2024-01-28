@@ -34,6 +34,7 @@
         }
 
         function download() {
+            var dim = document.getElementById('dimension').value;
             var imgSrc = document.getElementById('generatedQR').src;
             var link = document.createElement('a');
             link.href = imgSrc;
@@ -42,8 +43,8 @@
             // Create a temporary canvas
             var canvas = document.createElement('canvas');
             var ctx = canvas.getContext('2d');
-            canvas.width = 300; // Set the width of the canvas (adjust as needed)
-            canvas.height = 300; // Set the height of the canvas (adjust as needed)
+            canvas.width = dim; 
+            canvas.height = dim; 
 
             // Create an image element with crossOrigin attribute
             var img = new Image();
@@ -53,7 +54,7 @@
             // Draw the image on the canvas
             img.onload = function() {
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                link.href = canvas.toDataURL(); // Set the data URL as the link's href
+                link.href = canvas.toDataURL(); 
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
