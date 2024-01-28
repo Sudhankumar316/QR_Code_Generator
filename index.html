@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link rel="stylesheet" type="text/css" href="style.css" /> -->
+</head>
+
+<body class="bg-dark text-light">
+
+    <script type="text/javascript">
+        const url = "https://chart.googleapis.com/chart?cht=qr"
+        
+        function generate(){
+            var dim = document.getElementById('dimension').value;
+            var content = document.getElementById('content').value;
+
+            if(content != ''){
+                var img = `${url}&chs=${dim}x${dim}&chl=${content}`;
+                document.getElementById('generatedQR').src = img;
+                document.getElementById('resultContent').className = "col-md-5 col-sm-10 mx-auto border border-3 border-warning rounded p-3 m-1 fw-bold text-center";
+                document.getElementById('resultContent').style.display = "block";
+            }
+            else{
+                document.getElementById('generatedQR').src = "";
+                alert('please provide valid input')
+            }
+        }
+
+        function downloadQR(){
+            var imageUrl = document.getElementById("generatedQR").src;
+
+            // Create a link element
+            var downloadLink = document.createElement("a");
+
+            // Set the href attribute to the image URL
+            downloadLink.href = imageUrl;
+
+            // Set the download attribute with the desired filename
+            downloadLink.download = "downloaded_image.jpg";
+
+            // Append the link to the document
+            document.body.appendChild(downloadLink);
+
+            // Trigger a click event on the link to start the download
+            downloadLink.click();
+
+            // Remove the link from the document
+            document.body.removeChild(downloadLink);
+        }
+
+        function download() {
+            var img = document.getElementById('generatedQR');
+            var canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var context = canvas.getContext('2d');
+            context.drawImage(img, 0, 0);
+
+            // Create a temporary link element
+            var link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'generatedQR.png';
+
+            // Append the link to the document, trigger a click, and remove the link
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+
+    <h1 class="text-center m-4 text-info"><u>QR Code Generator</u></h1>
+
+    <div class="container-fluid row mx-auto">
+        
+        <div class="col-md-5 col-sm-10 mx-auto border border-3 border-warning rounded p-3 m-1 fw-bold">
+            <label for="dimension" class="form-label">Select dimension: </label>
+            <select id="dimension" class="form-select">
+                <option value="100">100x100</option>
+                <option value="150" selected>150x150</option>
+                <option value="200">200x200</option>
+                <option value="250">250x250</option>
+                <option value="300">300x300</option>
+            </select>
+
+            <label for="content" class="form-label mt-2">Content: </label>
+            <textarea id="content" class="form-control" placeholder="Enter/paste your content to generate QR code Eg: URL, email, txt, etc..."></textarea>
+
+            <button class="btn btn-warning mt-3" onclick="generate()">Generate</button>
+        </div>
+
+        <div id="resultContent" style="display: none;">
+            <h4>Generated QR</h4>
+            <img id="generatedQR" src="">
+            <button onclick="download()" class="btn btn-warning rounded m-2"><i class="fa-solid fa-download"></i></button>
+        </div>
+
+    </div>
+</body>
+
+</html>

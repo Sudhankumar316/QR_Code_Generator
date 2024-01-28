@@ -1,0 +1,17 @@
+body{
+    background-color: black;
+    text-align: center;
+    color: azure;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+label{
+    margin-bottom: 3px;
+    margin-right: 3px;
+}
+
+
+#inputContent{
+    border: 5px;
+    border-color: orangered;
+}
